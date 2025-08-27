@@ -41,7 +41,7 @@
 ### 필수 요구사항
 
 - **Node.js**: 18.0 이상
-- **npm**: 9.0 이상
+- **pnpm**: 9.x (Corepack 사용 권장: `corepack enable && corepack prepare pnpm@9.12.2 --activate`)
 
 ### 설치 및 실행
 
@@ -55,13 +55,13 @@ cd receipt-management-app
 2. **의존성 설치**
 
 ```bash
-npm install
+pnpm install
 ```
 
 3. **개발 서버 실행**
 
 ```bash
-npm run dev
+pnpm dev
 ```
 
 4. **브라우저에서 접속**
@@ -70,12 +70,12 @@ npm run dev
 ## 📜 사용 가능한 스크립트
 
 ```bash
-npm run dev          # 개발 서버 시작
-npm run build        # 프로덕션 빌드
-npm run preview      # 빌드 결과 미리보기
-npm run lint         # ESLint 코드 검사
-npm run format       # Prettier 코드 포맷팅 (Tailwind 클래스 정렬)
-npm run format:check # 포맷팅 상태 확인
+pnpm dev            # 개발 서버 시작
+pnpm build          # 프로덕션 빌드
+pnpm preview        # 빌드 결과 미리보기
+pnpm lint           # ESLint 코드 검사
+pnpm format         # Prettier 코드 포맷팅 (Tailwind 클래스 정렬)
+pnpm format:check   # 포맷팅 상태 확인
 ```
 
 ## 🎯 현재 구현된 기능

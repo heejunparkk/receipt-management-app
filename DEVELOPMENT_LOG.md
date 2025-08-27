@@ -127,15 +127,15 @@ src/
 
 ## 🔧 개발 환경 설정
 
-### 사용 가능한 스크립트
+### 사용 가능한 스크립트 (pnpm)
 
 ```bash
-npm run dev          # 개발 서버 시작
-npm run build        # 프로덕션 빌드
-npm run preview      # 빌드 결과 미리보기
-npm run lint         # 코드 검사
-npm run format       # 코드 포맷팅 (Tailwind 클래스 정렬 포함)
-npm run format:check # 포맷팅 확인
+pnpm dev            # 개발 서버 시작
+pnpm build          # 프로덕션 빌드
+pnpm preview        # 빌드 결과 미리보기
+pnpm lint           # 코드 검사
+pnpm format         # 코드 포맷팅 (Tailwind 클래스 정렬 포함)
+pnpm format:check   # 포맷팅 확인
 ```
 
 ### VS Code 설정
@@ -194,5 +194,5 @@ npm run format:check # 포맷팅 확인
 
 ---
 
-**개발자**: AI Assistant (GitHub Copilot)  
+**개발자**: AI Assistant (GitHub Copilot), heejun
 **마지막 업데이트**: 2025년 8월 27일
