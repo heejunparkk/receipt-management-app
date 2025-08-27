@@ -12,7 +12,7 @@ export const useReceipts = () => {
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {
-        const parsedReceipts = JSON.parse(stored).map((receipt: any) => ({
+        const parsedReceipts = (JSON.parse(stored) as Receipt[]).map((receipt: Receipt) => ({
           ...receipt,
           date: new Date(receipt.date),
           createdAt: new Date(receipt.createdAt),

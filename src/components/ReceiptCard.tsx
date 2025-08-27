@@ -63,7 +63,7 @@ export const ReceiptCard: React.FC<ReceiptCardProps> = ({
           <span>{formatDate(receipt.date)}</span>
         </div>
 
-        <div className="text-2xl font-bold text-success bg-gradient-to-r from-success to-success/80 bg-clip-text text-transparent group-hover:scale-110 transition-transform duration-300 origin-left">
+        <div className="text-2xl font-bold bg-gradient-to-r from-success to-success/80 bg-clip-text text-transparent group-hover:scale-110 transition-transform duration-300 origin-left">
           {formatAmount(receipt.amount)}
         </div>
 
