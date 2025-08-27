@@ -84,16 +84,16 @@ export const ReceiptList: React.FC<ReceiptListProps> = ({
     <div className="container mx-auto px-4 py-8">
       {/* 검색 및 필터 영역 */}
       <div className="mb-8 space-y-4">
-        <div className="flex flex-col sm:flex-row gap-4">
+        <div className="flex flex-col gap-4 sm:flex-row">
           {/* 검색창 */}
-          <div className="relative flex-1 max-w-sm">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+          <div className="relative max-w-sm flex-1">
+            <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform" />
             <Input
               type="text"
               placeholder="영수증 검색..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 border-0 shadow-elegant bg-card/50 backdrop-blur-sm hover:shadow-elegant-lg transition-all duration-200 focus:scale-[1.02]"
+              className="shadow-elegant bg-card/50 hover:shadow-elegant-lg border-0 pl-10 backdrop-blur-sm transition-all duration-200 focus:scale-[1.02]"
             />
           </div>
 
@@ -103,10 +103,10 @@ export const ReceiptList: React.FC<ReceiptListProps> = ({
               value={selectedCategory}
               onValueChange={setSelectedCategory}
             >
-              <SelectTrigger className="w-[140px] border-0 shadow-elegant bg-card/50 backdrop-blur-sm hover:shadow-elegant-lg transition-all duration-200">
+              <SelectTrigger className="shadow-elegant bg-card/50 hover:shadow-elegant-lg w-[140px] border-0 backdrop-blur-sm transition-all duration-200">
                 <SelectValue placeholder="전체" />
               </SelectTrigger>
-              <SelectContent className="border-0 shadow-elegant-lg backdrop-blur-xl bg-card/95">
+              <SelectContent className="shadow-elegant-lg bg-card/95 border-0 backdrop-blur-xl">
                 {categories.map((category) => (
                   <SelectItem
                     key={category}
@@ -123,7 +123,7 @@ export const ReceiptList: React.FC<ReceiptListProps> = ({
               variant="outline"
               size="sm"
               onClick={() => handleSort("date")}
-              className="gap-2 border-0 shadow-elegant bg-card/50 backdrop-blur-sm hover:shadow-elegant-lg hover:bg-primary/5 transition-all duration-200"
+              className="shadow-elegant bg-card/50 hover:shadow-elegant-lg hover:bg-primary/5 gap-2 border-0 backdrop-blur-sm transition-all duration-200"
             >
               <Calendar className="h-4 w-4" />
               날짜순
@@ -140,7 +140,7 @@ export const ReceiptList: React.FC<ReceiptListProps> = ({
               variant="outline"
               size="sm"
               onClick={() => handleSort("amount")}
-              className="gap-2 border-0 shadow-elegant bg-card/50 backdrop-blur-sm hover:shadow-elegant-lg hover:bg-primary/5 transition-all duration-200"
+              className="shadow-elegant bg-card/50 hover:shadow-elegant-lg hover:bg-primary/5 gap-2 border-0 backdrop-blur-sm transition-all duration-200"
             >
               <DollarSign className="h-4 w-4" />
               금액순
@@ -156,13 +156,13 @@ export const ReceiptList: React.FC<ReceiptListProps> = ({
         </div>
 
         {/* 요약 통계 */}
-        <div className="text-sm text-muted-foreground bg-card/30 backdrop-blur-sm rounded-lg px-4 py-3 shadow-elegant animate-fade-in">
+        <div className="text-muted-foreground bg-card/30 shadow-elegant animate-fade-in rounded-lg px-4 py-3 text-sm backdrop-blur-sm">
           총{" "}
-          <span className="font-semibold text-foreground">
+          <span className="text-foreground font-semibold">
             {filteredAndSortedReceipts.length}
           </span>
           개의 영수증 • 합계:{" "}
-          <span className="font-semibold text-success">
+          <span className="text-success font-semibold">
             {new Intl.NumberFormat("ko-KR", {
               style: "currency",
               currency: "KRW",
@@ -173,20 +173,20 @@ export const ReceiptList: React.FC<ReceiptListProps> = ({
 
       {/* 영수증 목록 */}
       {filteredAndSortedReceipts.length === 0 ? (
-        <div className="text-center py-12 animate-fade-in">
-          <div className="bg-card/50 backdrop-blur-sm rounded-2xl p-8 shadow-elegant">
-            <p className="text-muted-foreground text-lg mb-2">
+        <div className="animate-fade-in py-12 text-center">
+          <div className="bg-card/50 shadow-elegant rounded-2xl p-8 backdrop-blur-sm">
+            <p className="text-muted-foreground mb-2 text-lg">
               {receipts.length === 0
                 ? "아직 등록된 영수증이 없습니다."
                 : "검색 결과가 없습니다."}
             </p>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
               '+' 버튼을 눌러 첫 번째 영수증을 추가해보세요
             </p>
           </div>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {filteredAndSortedReceipts.map((receipt, index) => (
             <div
               key={receipt.id}

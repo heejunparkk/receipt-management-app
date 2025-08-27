@@ -35,65 +35,65 @@ export const ReceiptCard: React.FC<ReceiptCardProps> = ({
 
   return (
     <Card
-      className="group cursor-pointer transition-all duration-500 hover:shadow-elegant-lg hover:-translate-y-3 hover:scale-105 animate-fade-in-up border-0 shadow-elegant bg-gradient-to-br from-card/90 to-card/60 backdrop-blur-sm overflow-hidden relative"
+      className="group hover:shadow-elegant-lg animate-fade-in-up shadow-elegant from-card/90 to-card/60 relative cursor-pointer overflow-hidden border-0 bg-gradient-to-br backdrop-blur-sm transition-all duration-500 hover:-translate-y-3 hover:scale-105"
       onClick={() => onView(receipt)}
     >
-      <CardHeader className="pb-3 relative z-10">
+      <CardHeader className="relative z-10 pb-3">
         <div className="flex items-start justify-between">
-          <h3 className="font-semibold text-lg leading-none tracking-tight line-clamp-2 group-hover:text-primary transition-all duration-300 group-hover:scale-105 origin-left">
+          <h3 className="group-hover:text-primary line-clamp-2 origin-left text-lg leading-none font-semibold tracking-tight transition-all duration-300 group-hover:scale-105">
             {receipt.title}
           </h3>
           <Badge
             variant="secondary"
-            className="ml-2 shrink-0 animate-slide-in-right shadow-sm group-hover:bg-primary/20 group-hover:text-primary group-hover:scale-110 transition-all duration-300"
+            className="animate-slide-in-right group-hover:bg-primary/20 group-hover:text-primary ml-2 shrink-0 shadow-sm transition-all duration-300 group-hover:scale-110"
           >
             {receipt.category}
           </Badge>
         </div>
       </CardHeader>
 
-      <CardContent className="space-y-3 relative z-10">
-        <div className="flex items-center text-sm text-muted-foreground group-hover:text-foreground transition-all duration-300 group-hover:translate-x-1">
-          <Store className="mr-2 h-4 w-4 text-primary/70 group-hover:text-primary group-hover:scale-110 transition-all duration-300" />
+      <CardContent className="relative z-10 space-y-3">
+        <div className="text-muted-foreground group-hover:text-foreground flex items-center text-sm transition-all duration-300 group-hover:translate-x-1">
+          <Store className="text-primary/70 group-hover:text-primary mr-2 h-4 w-4 transition-all duration-300 group-hover:scale-110" />
           <span className="truncate">{receipt.store}</span>
         </div>
 
-        <div className="flex items-center text-sm text-muted-foreground group-hover:text-foreground transition-all duration-300 group-hover:translate-x-1">
-          <Calendar className="mr-2 h-4 w-4 text-primary/70 group-hover:text-primary group-hover:scale-110 transition-all duration-300" />
+        <div className="text-muted-foreground group-hover:text-foreground flex items-center text-sm transition-all duration-300 group-hover:translate-x-1">
+          <Calendar className="text-primary/70 group-hover:text-primary mr-2 h-4 w-4 transition-all duration-300 group-hover:scale-110" />
           <span>{formatDate(receipt.date)}</span>
         </div>
 
-        <div className="text-2xl font-bold bg-gradient-to-r from-success to-success/80 bg-clip-text text-transparent group-hover:scale-110 transition-transform duration-300 origin-left">
+        <div className="from-success to-success/80 origin-left bg-gradient-to-r bg-clip-text text-2xl font-bold text-transparent transition-transform duration-300 group-hover:scale-110">
           {formatAmount(receipt.amount)}
         </div>
 
         {receipt.imageUrl && (
-          <div className="mt-4 overflow-hidden rounded-lg shadow-md group-hover:shadow-lg transition-all duration-300">
+          <div className="mt-4 overflow-hidden rounded-lg shadow-md transition-all duration-300 group-hover:shadow-lg">
             <img
               src={receipt.imageUrl}
               alt={receipt.title}
               loading="lazy"
-              className="w-full h-32 object-cover transition-all duration-500 group-hover:scale-110 group-hover:brightness-110"
+              className="h-32 w-full object-cover transition-all duration-500 group-hover:scale-110 group-hover:brightness-110"
             />
           </div>
         )}
 
         {receipt.description && (
-          <p className="text-sm text-muted-foreground line-clamp-2 group-hover:text-foreground transition-all duration-300 group-hover:translate-x-1">
+          <p className="text-muted-foreground group-hover:text-foreground line-clamp-2 text-sm transition-all duration-300 group-hover:translate-x-1">
             {receipt.description}
           </p>
         )}
       </CardContent>
 
-      <CardFooter className="pt-3 relative z-10">
+      <CardFooter className="relative z-10 pt-3">
         <div
-          className="flex w-full gap-2 opacity-70 group-hover:opacity-100 transition-all duration-300 transform translate-y-1 group-hover:translate-y-0"
+          className="flex w-full translate-y-1 transform gap-2 opacity-70 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100"
           onClick={(e) => e.stopPropagation()}
         >
           <Button
             variant="outline"
             size="sm"
-            className="flex-1 hover:bg-primary/10 hover:border-primary/30 hover:text-primary transition-all duration-200 hover:scale-105"
+            className="hover:bg-primary/10 hover:border-primary/30 hover:text-primary flex-1 transition-all duration-200 hover:scale-105"
             onClick={() => onEdit(receipt)}
           >
             <Edit2 className="mr-2 h-4 w-4" />
@@ -102,7 +102,7 @@ export const ReceiptCard: React.FC<ReceiptCardProps> = ({
           <Button
             variant="destructive"
             size="sm"
-            className="flex-1 hover:scale-110 hover:shadow-md transition-all duration-200"
+            className="flex-1 transition-all duration-200 hover:scale-110 hover:shadow-md"
             onClick={() => onDelete(receipt.id)}
           >
             <Trash2 className="mr-2 h-4 w-4" />
@@ -112,10 +112,10 @@ export const ReceiptCard: React.FC<ReceiptCardProps> = ({
       </CardFooter>
 
       {/* 호버시 나타나는 배경 그라데이션 */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+      <div className="from-primary/5 to-primary/10 pointer-events-none absolute inset-0 bg-gradient-to-br via-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
 
       {/* 테두리 광선 효과 */}
-      <div className="absolute inset-0 rounded-lg border border-primary/0 group-hover:border-primary/20 transition-all duration-500" />
+      <div className="border-primary/0 group-hover:border-primary/20 absolute inset-0 rounded-lg border transition-all duration-500" />
     </Card>
   );
 };

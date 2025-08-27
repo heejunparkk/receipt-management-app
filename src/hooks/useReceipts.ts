@@ -5,26 +5,27 @@ const STORAGE_KEY = "receipts";
 
 export const useReceipts = () => {
   const [receipts, setReceipts] = useState<Receipt[]>([]);
-  const [loading, setLoading] = useState(true);
+  const loading = false; // localStorage는 동기식이므로 항상 false
 
   // localStorage에서 영수증 데이터 로드
   useEffect(() => {
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {
-        const parsedReceipts = (JSON.parse(stored) as Receipt[]).map((receipt: Receipt) => ({
-          ...receipt,
-          date: new Date(receipt.date),
-          createdAt: new Date(receipt.createdAt),
-          updatedAt: new Date(receipt.updatedAt),
-        }));
+        const parsedReceipts = (JSON.parse(stored) as Receipt[]).map(
+          (receipt: Receipt) => ({
+            ...receipt,
+            date: new Date(receipt.date),
+            createdAt: new Date(receipt.createdAt),
+            updatedAt: new Date(receipt.updatedAt),
+          })
+        );
         setReceipts(parsedReceipts);
       }
     } catch (error) {
       console.error("영수증 데이터를 불러오는데 실패했습니다:", error);
-    } finally {
-      setLoading(false);
     }
+    // localStorage는 동기식이므로 로딩 상태 불필요
   }, []);
 
   // localStorage에 영수증 데이터 저장

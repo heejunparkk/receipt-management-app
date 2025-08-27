@@ -29,21 +29,28 @@ function App() {
     }
   };
 
+  // loading이 항상 false이므로 이 조건은 실행되지 않음
+  // 향후 API 호출 시를 대비해 유지
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-muted-foreground text-lg">
-            영수증 데이터를 불러오는 중...
-          </p>
-        </div>
+      <div className="bg-background min-h-screen">
+        <Header title="영수증 관리 앱" onAddClick={handleAddReceipt} />
+        <main>
+          <div className="flex min-h-[60vh] items-center justify-center">
+            <div className="text-center">
+              <div className="border-primary mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-b-2"></div>
+              <p className="text-muted-foreground">
+                영수증 데이터를 불러오는 중...
+              </p>
+            </div>
+          </div>
+        </main>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="bg-background min-h-screen">
       <Header title="영수증 관리 앱" onAddClick={handleAddReceipt} />
       <main>
         <ReceiptList
