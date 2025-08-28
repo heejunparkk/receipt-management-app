@@ -3,7 +3,14 @@ import { Receipt } from "../types/receipt";
 import { Card, CardContent, CardFooter, CardHeader } from "./ui/card";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "./ui/tooltip";
 import { Edit2, Trash2, Store, Calendar } from "lucide-react";
+import { formatCurrency, formatDateShort } from "../lib/utils";
 
 interface ReceiptCardProps {
   receipt: Receipt;
@@ -18,21 +25,6 @@ export const ReceiptCard: React.FC<ReceiptCardProps> = ({
   onDelete,
   onView,
 }) => {
-  const formatDate = (date: Date) => {
-    return new Intl.DateTimeFormat("ko-KR", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    }).format(date);
-  };
-
-  const formatAmount = (amount: number) => {
-    return new Intl.NumberFormat("ko-KR", {
-      style: "currency",
-      currency: "KRW",
-    }).format(amount);
-  };
-
   return (
     <Card
       className="group hover:shadow-elegant-lg animate-fade-in-up shadow-elegant from-card/90 to-card/60 relative cursor-pointer overflow-hidden border-0 bg-gradient-to-br backdrop-blur-sm transition-all duration-500 hover:-translate-y-3 hover:scale-105"
@@ -55,16 +47,16 @@ export const ReceiptCard: React.FC<ReceiptCardProps> = ({
       <CardContent className="relative z-10 space-y-3">
         <div className="text-muted-foreground group-hover:text-foreground flex items-center text-sm transition-all duration-300 group-hover:translate-x-1">
           <Store className="text-primary/70 group-hover:text-primary mr-2 h-4 w-4 transition-all duration-300 group-hover:scale-110" />
-          <span className="truncate">{receipt.store}</span>
+          <span className="truncate">{receipt.storeName}</span>
         </div>
 
         <div className="text-muted-foreground group-hover:text-foreground flex items-center text-sm transition-all duration-300 group-hover:translate-x-1">
           <Calendar className="text-primary/70 group-hover:text-primary mr-2 h-4 w-4 transition-all duration-300 group-hover:scale-110" />
-          <span>{formatDate(receipt.date)}</span>
+          <span>{formatDateShort(receipt.date)}</span>
         </div>
 
         <div className="from-success to-success/80 origin-left bg-gradient-to-r bg-clip-text text-2xl font-bold text-transparent transition-transform duration-300 group-hover:scale-110">
-          {formatAmount(receipt.amount)}
+          {formatCurrency(receipt.amount)}
         </div>
 
         {receipt.imageUrl && (
@@ -86,29 +78,46 @@ export const ReceiptCard: React.FC<ReceiptCardProps> = ({
       </CardContent>
 
       <CardFooter className="relative z-10 pt-3">
-        <div
-          className="flex w-full translate-y-1 transform gap-2 opacity-70 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100"
-          onClick={(e) => e.stopPropagation()}
-        >
-          <Button
-            variant="outline"
-            size="sm"
-            className="hover:bg-primary/10 hover:border-primary/30 hover:text-primary flex-1 transition-all duration-200 hover:scale-105"
-            onClick={() => onEdit(receipt)}
+        <TooltipProvider>
+          <div
+            className="flex w-full translate-y-1 transform gap-2 opacity-70 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100"
+            onClick={(e) => e.stopPropagation()}
           >
-            <Edit2 className="mr-2 h-4 w-4" />
-            수정
-          </Button>
-          <Button
-            variant="destructive"
-            size="sm"
-            className="flex-1 transition-all duration-200 hover:scale-110 hover:shadow-md"
-            onClick={() => onDelete(receipt.id)}
-          >
-            <Trash2 className="mr-2 h-4 w-4" />
-            삭제
-          </Button>
-        </div>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="hover:bg-primary/10 hover:border-primary/30 hover:text-primary flex-1 transition-all duration-200 hover:scale-105"
+                  onClick={() => onEdit(receipt)}
+                >
+                  <Edit2 className="mr-2 h-4 w-4" />
+                  수정
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>영수증 정보를 수정합니다</p>
+              </TooltipContent>
+            </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  className="flex-1 transition-all duration-200 hover:scale-110 hover:shadow-md"
+                  onClick={() => onDelete(receipt.id)}
+                >
+                  <Trash2 className="mr-2 h-4 w-4" />
+                  삭제
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>영수증을 영구적으로 삭제합니다</p>
+              </TooltipContent>
+            </Tooltip>
+          </div>
+        </TooltipProvider>
       </CardFooter>
 
       {/* 호버시 나타나는 배경 그라데이션 */}

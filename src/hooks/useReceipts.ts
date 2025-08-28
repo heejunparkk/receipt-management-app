@@ -89,7 +89,7 @@ export const useReceipts = () => {
     return receipts.filter(
       (receipt) =>
         receipt.title.toLowerCase().includes(query.toLowerCase()) ||
-        receipt.store.toLowerCase().includes(query.toLowerCase()) ||
+        receipt.storeName.toLowerCase().includes(query.toLowerCase()) ||
         receipt.description?.toLowerCase().includes(query.toLowerCase())
     );
   };

@@ -4,7 +4,7 @@ export interface Receipt {
   amount: number;
   date: Date;
   category: string;
-  store: string;
+  storeName: string;
   imageUrl?: string;
   description?: string;
   tags?: string[];
@@ -17,7 +17,7 @@ export interface ReceiptFormData {
   amount: number;
   date: string;
   category: string;
-  store: string;
+  storeName: string;
   description?: string;
   tags?: string[];
 }
