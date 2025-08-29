@@ -102,7 +102,6 @@ const FormControl = React.forwardRef<
 >(({ ...props }, ref) => {
   const { error, formItemId, formDescriptionId, formMessageId } =
     useFormField();
-
   return (
     <div
       ref={ref}
@@ -112,7 +111,7 @@ const FormControl = React.forwardRef<
           ? `${formDescriptionId}`
           : `${formDescriptionId} ${formMessageId}`
       }
-      aria-invalid={error ? "true" : "false"}
+      {...(error && { "aria-invalid": true })}
       {...props}
     />
   );

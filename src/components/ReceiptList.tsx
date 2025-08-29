@@ -40,7 +40,7 @@ export const ReceiptList: React.FC<ReceiptListProps> = ({
       filtered = filtered.filter(
         (receipt) =>
           receipt.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          receipt.store.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          receipt.storeName.toLowerCase().includes(searchQuery.toLowerCase()) ||
           receipt.description?.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
@@ -190,8 +190,7 @@ export const ReceiptList: React.FC<ReceiptListProps> = ({
           {filteredAndSortedReceipts.map((receipt, index) => (
             <div
               key={receipt.id}
-              style={{ animationDelay: `${index * 0.1}s` }}
-              className="animate-fade-in-up"
+              className={`animate-fade-in-up [animation-delay:${index * 100}ms]`}
             >
               <ReceiptCard
                 receipt={receipt}
