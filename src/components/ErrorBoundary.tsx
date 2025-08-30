@@ -51,14 +51,14 @@ class ErrorBoundary extends Component<Props, State> {
 
       // 기본 에러 UI
       return (
-        <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-red-50 to-red-100 p-4">
-          <div className="shadow-elegant w-full max-w-md rounded-lg bg-white p-8 text-center">
+        <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-red-50 to-red-100 p-4 dark:from-red-950 dark:to-red-900">
+          <div className="shadow-elegant bg-card w-full max-w-md rounded-lg p-8 text-center">
             <div className="mb-6">
               <AlertTriangle className="mx-auto mb-4 h-16 w-16 text-red-500" />
-              <h1 className="mb-2 text-2xl font-bold text-gray-900">
+              <h1 className="text-card-foreground mb-2 text-2xl font-bold">
                 앗! 문제가 발생했습니다
               </h1>
-              <p className="text-gray-600">
+              <p className="text-muted-foreground">
                 예상치 못한 오류가 발생했습니다. 불편을 드려 죄송합니다.
               </p>
             </div>
@@ -107,8 +107,8 @@ class ErrorBoundary extends Component<Props, State> {
               </Button>
             </div>
 
-            <div className="mt-6 border-t border-gray-200 pt-4">
-              <p className="text-xs text-gray-500">
+            <div className="border-border mt-6 border-t pt-4">
+              <p className="text-muted-foreground text-xs">
                 문제가 계속 발생하면 브라우저의 개발자 도구를 확인하거나
                 <br />
                 localStorage를 초기화해보세요.

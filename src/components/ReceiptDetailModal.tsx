@@ -98,41 +98,41 @@ const ReceiptDetailModal: React.FC<ReceiptDetailModalProps> = ({
 
             {/* 정보 그리드 */}
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-              <div className="flex items-center space-x-3 rounded-lg bg-gray-50 p-3">
-                <Store className="h-5 w-5 text-gray-500" />
+              <div className="bg-muted/50 flex items-center space-x-3 rounded-lg p-3">
+                <Store className="text-muted-foreground h-5 w-5" />
                 <div>
-                  <p className="text-sm text-gray-500">상점명</p>
-                  <p className="font-medium text-gray-900">
+                  <p className="text-muted-foreground text-sm">상점명</p>
+                  <p className="text-foreground font-medium">
                     {receipt.storeName}
                   </p>
                 </div>
               </div>
 
-              <div className="flex items-center space-x-3 rounded-lg bg-gray-50 p-3">
-                <Calendar className="h-5 w-5 text-gray-500" />
+              <div className="bg-muted/50 flex items-center space-x-3 rounded-lg p-3">
+                <Calendar className="text-muted-foreground h-5 w-5" />
                 <div>
-                  <p className="text-sm text-gray-500">날짜</p>
-                  <p className="font-medium text-gray-900">
+                  <p className="text-muted-foreground text-sm">날짜</p>
+                  <p className="text-foreground font-medium">
                     {formatDate(receipt.date)}
                   </p>
                 </div>
               </div>
 
-              <div className="flex items-center space-x-3 rounded-lg bg-gray-50 p-3">
-                <Tag className="h-5 w-5 text-gray-500" />
+              <div className="bg-muted/50 flex items-center space-x-3 rounded-lg p-3">
+                <Tag className="text-muted-foreground h-5 w-5" />
                 <div>
-                  <p className="text-sm text-gray-500">카테고리</p>
+                  <p className="text-muted-foreground text-sm">카테고리</p>
                   <Badge variant="secondary" className="mt-1">
                     {receipt.category}
                   </Badge>
                 </div>
               </div>
 
-              <div className="flex items-center space-x-3 rounded-lg bg-gray-50 p-3">
-                <FileText className="h-5 w-5 text-gray-500" />
+              <div className="bg-muted/50 flex items-center space-x-3 rounded-lg p-3">
+                <FileText className="text-muted-foreground h-5 w-5" />
                 <div>
-                  <p className="text-sm text-gray-500">생성일</p>
-                  <p className="font-medium text-gray-900">
+                  <p className="text-muted-foreground text-sm">생성일</p>
+                  <p className="text-foreground font-medium">
                     {formatDate(receipt.createdAt)}
                   </p>
                 </div>
@@ -141,20 +141,20 @@ const ReceiptDetailModal: React.FC<ReceiptDetailModalProps> = ({
 
             {/* 설명 */}
             {receipt.description && (
-              <div className="rounded-lg border border-blue-200 bg-blue-50 p-4">
-                <h4 className="mb-2 font-medium text-blue-900">설명</h4>
-                <p className="text-blue-800">{receipt.description}</p>
+              <div className="border-primary/20 bg-primary/5 rounded-lg border p-4">
+                <h4 className="text-primary mb-2 font-medium">설명</h4>
+                <p className="text-foreground">{receipt.description}</p>
               </div>
             )}
 
             {/* 메타 정보 */}
-            <div className="border-t border-gray-100 py-2 text-center text-xs text-gray-500">
+            <div className="border-border text-muted-foreground border-t py-2 text-center text-xs">
               영수증 ID: {receipt.id}
             </div>
           </div>
 
           {/* 액션 버튼 */}
-          <div className="flex justify-end space-x-3 border-t border-gray-100 pt-4">
+          <div className="border-border flex justify-end space-x-3 border-t pt-4">
             <Button variant="outline" onClick={onClose}>
               닫기
             </Button>

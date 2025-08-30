@@ -136,21 +136,23 @@ const Modal: React.FC<ModalProps> = ({
       <div
         ref={modalRef}
         className={cn(
-          "shadow-elegant-lg animate-scale-in relative w-full rounded-2xl bg-white",
+          "shadow-elegant-lg animate-scale-in bg-card relative w-full rounded-2xl",
           sizeClasses[size],
           className
         )}
       >
         {/* 헤더 */}
         {(title || showCloseButton) && (
-          <div className="flex items-center justify-between border-b border-gray-100 p-6 pb-4">
+          <div className="border-border flex items-center justify-between border-b p-6 pb-4">
             {title && (
-              <h2 className="text-xl font-semibold text-gray-900">{title}</h2>
+              <h2 className="text-card-foreground text-xl font-semibold">
+                {title}
+              </h2>
             )}
             {showCloseButton && (
               <button
                 onClick={onClose}
-                className="rounded-lg p-2 text-gray-400 transition-colors duration-200 hover:bg-gray-100 hover:text-gray-600"
+                className="text-muted-foreground hover:bg-muted hover:text-foreground rounded-lg p-2 transition-colors duration-200"
                 aria-label="모달 닫기"
               >
                 <X size={20} />

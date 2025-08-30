@@ -42,33 +42,33 @@
 
 /* Dark Mode Variables */
 .dark {
-  --color-background: #0a0a0a;
-  --color-foreground: #fafafa;
-  --color-card: #09090b;
-  --color-card-foreground: #fafafa;
-  --color-popover: #09090b;
-  --color-popover-foreground: #fafafa;
+  --color-background: #0f0f23;
+  --color-foreground: #f4f4f5;
+  --color-card: #18181b;
+  --color-card-foreground: #f4f4f5;
+  --color-popover: #18181b;
+  --color-popover-foreground: #f4f4f5;
 
-  --color-primary: #7c3aed;
+  --color-primary: #8b5cf6;
   --color-primary-foreground: #fafafa;
 
   --color-secondary: #27272a;
-  --color-secondary-foreground: #fafafa;
+  --color-secondary-foreground: #f4f4f5;
 
   --color-muted: #27272a;
-  --color-muted-foreground: #a1a1aa;
+  --color-muted-foreground: #d4d4d8;
   --color-accent: #27272a;
-  --color-accent-foreground: #fafafa;
-  --color-destructive: #ef4444;
+  --color-accent-foreground: #f4f4f5;
+  --color-destructive: #f87171;
   --color-destructive-foreground: #fafafa;
-  --color-success: #10b981;
-  --color-success-foreground: #fafafa;
-  --color-warning: #f59e0b;
-  --color-warning-foreground: #fafafa;
+  --color-success: #34d399;
+  --color-success-foreground: #0f172a;
+  --color-warning: #fbbf24;
+  --color-warning-foreground: #0f172a;
 
-  --color-border: #27272a;
+  --color-border: #3f3f46;
   --color-input: #27272a;
-  --color-ring: #7c3aed;
+  --color-ring: #8b5cf6;
 }
 
 /* Custom Shadows */
@@ -115,11 +115,7 @@
 
   body {
     @apply m-0 min-h-screen p-0;
-    background: linear-gradient(
-      135deg,
-      var(--color-background) 0%,
-      #f8fafc 100%
-    );
+    background: var(--color-background);
     color: var(--color-foreground);
     font-feature-settings: "cv11", "ss01";
     font-variation-settings: "opsz" 32;
