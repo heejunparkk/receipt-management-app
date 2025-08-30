@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import { Header } from "./components/Header";
 import { ReceiptList } from "./components/ReceiptList";
@@ -7,16 +7,27 @@ import { Receipt } from "./types/receipt";
 import ReceiptAddModal from "./components/ReceiptAddModal";
 import ReceiptEditModal from "./components/ReceiptEditModal";
 import ReceiptDetailModal from "./components/ReceiptDetailModal";
+import { StatsDashboard } from "./components/StatsDashboard";
+import { Button } from "./components/ui/button";
 
 function App() {
-  const { receipts, loading, addReceipt, updateReceipt, deleteReceipt } =
-    useReceipts();
+  const {
+    receipts,
+    loading,
+    addReceipt,
+    updateReceipt,
+    deleteReceipt,
+    importReceipts,
+  } = useReceipts();
 
   // 모달 상태 관리
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const [selectedReceipt, setSelectedReceipt] = useState<Receipt | null>(null);
+
+  // 탭 상태 관리
+  const [activeTab, setActiveTab] = useState<"receipts" | "stats">("receipts");
 
   const handleAddReceipt = () => {
     setIsAddModalOpen(true);
@@ -85,12 +96,52 @@ function App() {
     setSelectedReceipt(null);
   };
 
+  const handleImportData = (importedReceipts: Receipt[]) => {
+    const result = importReceipts(importedReceipts);
+    if (result.skipped > 0) {
+      toast.success(
+        `${result.imported}개 영수증을 가져왔습니다. (${result.skipped}개 중복 제외)`
+      );
+    }
+  };
+
+  // 키보드 단축키
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      // Ctrl+N (Windows) 또는 Cmd+N (Mac): 새 영수증 추가
+      if ((event.ctrlKey || event.metaKey) && event.key === "n") {
+        event.preventDefault();
+        handleAddReceipt();
+      }
+
+      // Ctrl+1: 영수증 목록 탭
+      if ((event.ctrlKey || event.metaKey) && event.key === "1") {
+        event.preventDefault();
+        setActiveTab("receipts");
+      }
+
+      // Ctrl+2: 통계 탭
+      if ((event.ctrlKey || event.metaKey) && event.key === "2") {
+        event.preventDefault();
+        setActiveTab("stats");
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
   // loading이 항상 false이므로 이 조건은 실행되지 않음
   // 향후 API 호출 시를 대비해 유지
   if (loading) {
     return (
       <div className="bg-background min-h-screen">
-        <Header title="쓱싹" onAddClick={handleAddReceipt} />
+        <Header
+          title="쓱싹"
+          onAddClick={handleAddReceipt}
+          receipts={receipts}
+          onImport={handleImportData}
+        />
         <main>
           <div className="flex min-h-[60vh] items-center justify-center">
             <div className="text-center">
@@ -107,14 +158,50 @@ function App() {
 
   return (
     <div className="bg-background min-h-screen">
-      <Header title="쓱싹" onAddClick={handleAddReceipt} />
+      <Header
+        title="쓱싹"
+        onAddClick={handleAddReceipt}
+        receipts={receipts}
+        onImport={handleImportData}
+      />
       <main>
-        <ReceiptList
-          receipts={receipts}
-          onEdit={handleEditReceipt}
-          onDelete={handleDeleteReceipt}
-          onView={handleViewReceipt}
-        />
+        {/* 탭 네비게이션 */}
+        <div className="container mx-auto px-4 py-4">
+          <div className="border-border flex space-x-1 border-b">
+            <Button
+              variant={activeTab === "receipts" ? "default" : "ghost"}
+              onClick={() => setActiveTab("receipts")}
+              className="rounded-b-none"
+              aria-label="영수증 목록 탭 (Ctrl+1)"
+              aria-pressed={activeTab === "receipts"}
+            >
+              📄 영수증 목록
+            </Button>
+            <Button
+              variant={activeTab === "stats" ? "default" : "ghost"}
+              onClick={() => setActiveTab("stats")}
+              className="rounded-b-none"
+              aria-label="지출 통계 탭 (Ctrl+2)"
+              aria-pressed={activeTab === "stats"}
+            >
+              📊 지출 통계
+            </Button>
+          </div>
+        </div>
+
+        {/* 탭 콘텐츠 */}
+        <div className="container mx-auto px-4">
+          {activeTab === "receipts" ? (
+            <ReceiptList
+              receipts={receipts}
+              onEdit={handleEditReceipt}
+              onDelete={handleDeleteReceipt}
+              onView={handleViewReceipt}
+            />
+          ) : (
+            <StatsDashboard receipts={receipts} />
+          )}
+        </div>
       </main>
 
       {/* 모달들 */}

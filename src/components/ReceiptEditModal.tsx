@@ -21,6 +21,11 @@ import {
   categories,
   ReceiptFormData,
 } from "../schemas/receiptSchema";
+import {
+  resizeImage,
+  isValidImageFile,
+  isValidFileSize,
+} from "../utils/imageUtils";
 
 interface ReceiptEditModalProps {
   isOpen: boolean;
@@ -38,7 +43,7 @@ const ReceiptEditModal: React.FC<ReceiptEditModalProps> = ({
   onEdit,
   receipt,
 }) => {
-  const methods = useForm<ReceiptFormData>({
+  const methods = useForm({
     resolver: zodResolver(receiptSchema),
   });
 
@@ -91,13 +96,29 @@ const ReceiptEditModal: React.FC<ReceiptEditModalProps> = ({
     }
   };
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      // 실제 구현에서는 이미지 업로드 API 호출
-      // 현재는 임시로 파일명만 저장
-      setValue("imageUrl", file.name);
+    if (!file) return;
+
+    // 파일 유효성 검사
+    if (!isValidImageFile(file)) {
+      toast.error("지원되지 않는 이미지 형식입니다. (JPEG, PNG, WebP만 지원)");
+      return;
+    }
+
+    if (!isValidFileSize(file)) {
+      toast.error("파일 크기가 너무 큽니다. (최대 5MB)");
+      return;
+    }
+
+    try {
+      // 이미지 리사이즈 및 Base64 변환
+      const resizedImage = await resizeImage(file);
+      setValue("imageUrl", resizedImage);
       toast.success("이미지가 업로드되었습니다!");
+    } catch (error) {
+      console.error("이미지 업로드 실패:", error);
+      toast.error("이미지 업로드에 실패했습니다.");
     }
   };
 
@@ -285,20 +306,25 @@ const ReceiptEditModal: React.FC<ReceiptEditModalProps> = ({
               </label>
 
               {watchedImageUrl ? (
-                <div className="flex items-center space-x-3 rounded-lg border border-gray-300 bg-gray-50 p-3">
-                  <div className="flex-1">
-                    <p className="truncate text-sm text-gray-600">
-                      {watchedImageUrl}
-                    </p>
+                <div className="space-y-3">
+                  <div className="relative overflow-hidden rounded-lg border border-gray-300">
+                    <img
+                      src={watchedImageUrl}
+                      alt="업로드된 영수증"
+                      className="h-48 w-full object-cover"
+                    />
+                    <button
+                      type="button"
+                      onClick={removeImage}
+                      className="absolute top-2 right-2 rounded-full bg-red-500 p-1 text-white transition-colors hover:bg-red-600"
+                      aria-label="이미지 제거"
+                    >
+                      <X size={16} />
+                    </button>
                   </div>
-                  <button
-                    type="button"
-                    onClick={removeImage}
-                    className="p-1 text-gray-400 transition-colors hover:text-red-500"
-                    aria-label="이미지 제거"
-                  >
-                    <X size={16} />
-                  </button>
+                  <p className="text-center text-xs text-gray-500">
+                    영수증 이미지가 업로드되었습니다
+                  </p>
                 </div>
               ) : (
                 <div className="hover:border-primary rounded-lg border-2 border-dashed border-gray-300 p-6 text-center transition-colors">

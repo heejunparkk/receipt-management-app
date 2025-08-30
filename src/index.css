@@ -33,61 +33,53 @@
   --color-border: #e2e8f0;
   --color-input: #ffffff;
   --color-ring: #6366f1;
-
   /* Modern Border Radius */
   --radius: 0.75rem;
   --radius-lg: 1rem;
   --radius-md: 0.5rem;
   --radius-sm: 0.25rem;
+}
 
-  /* Custom Shadows */
+/* Dark Mode Variables */
+.dark {
+  --color-background: #0a0a0a;
+  --color-foreground: #fafafa;
+  --color-card: #09090b;
+  --color-card-foreground: #fafafa;
+  --color-popover: #09090b;
+  --color-popover-foreground: #fafafa;
+
+  --color-primary: #7c3aed;
+  --color-primary-foreground: #fafafa;
+
+  --color-secondary: #27272a;
+  --color-secondary-foreground: #fafafa;
+
+  --color-muted: #27272a;
+  --color-muted-foreground: #a1a1aa;
+  --color-accent: #27272a;
+  --color-accent-foreground: #fafafa;
+  --color-destructive: #ef4444;
+  --color-destructive-foreground: #fafafa;
+  --color-success: #10b981;
+  --color-success-foreground: #fafafa;
+  --color-warning: #f59e0b;
+  --color-warning-foreground: #fafafa;
+
+  --color-border: #27272a;
+  --color-input: #27272a;
+  --color-ring: #7c3aed;
+}
+
+/* Custom Shadows */
+:root {
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1),
-    0 4px 6px -4px rgb(0 0 0 / 0.1);
-  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1),
-    0 8px 10px -6px rgb(0 0 0 / 0.1);
-}
-
-@theme dark {
-  /* Dark Mode - Premium Colors */
-  --color-background: #0c0a09;
-  --color-foreground: #fafafa;
-  --color-card: #1c1917;
-  --color-card-foreground: #fafafa;
-  --color-popover: #1c1917;
-  --color-popover-foreground: #fafafa;
-
-  --color-primary: #8b5cf6;
-  --color-primary-foreground: #ffffff;
-
-  --color-secondary: #292524;
-  --color-secondary-foreground: #fafafa;
-
-  --color-muted: #1c1917;
-  --color-muted-foreground: #a8a29e;
-  --color-accent: #292524;
-  --color-accent-foreground: #fafafa;
-  --color-destructive: #dc2626;
-  --color-destructive-foreground: #fafafa;
-  --color-success: #10b981;
-  --color-success-foreground: #ffffff;
-  --color-warning: #f59e0b;
-  --color-warning-foreground: #000000;
-
-  --color-border: #44403c;
-  --color-input: #292524;
-  --color-ring: #8b5cf6;
-
-  /* Dark Mode Shadows */
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
-  --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.4), 0 1px 2px -1px rgb(0 0 0 / 0.4);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.4);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.4),
-    0 4px 6px -4px rgb(0 0 0 / 0.4);
-  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.4),
-    0 8px 10px -6px rgb(0 0 0 / 0.4);
+  --shadow-lg:
+    0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl:
+    0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
 }
 
 /* Enhanced Base Styles */
@@ -98,9 +90,19 @@
   }
 
   html {
-    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
-      "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
-      "Helvetica Neue", sans-serif;
+    font-family:
+      "Inter",
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      "Roboto",
+      "Oxygen",
+      "Ubuntu",
+      "Cantarell",
+      "Fira Sans",
+      "Droid Sans",
+      "Helvetica Neue",
+      sans-serif;
     line-height: 1.5;
     font-weight: 400;
     font-synthesis: none;
@@ -112,7 +114,7 @@
   }
 
   body {
-    @apply m-0 p-0 min-h-screen;
+    @apply m-0 min-h-screen p-0;
     background: linear-gradient(
       135deg,
       var(--color-background) 0%,
@@ -259,11 +261,15 @@
 @keyframes pulse-glow {
   0%,
   100% {
-    box-shadow: 0 0 5px var(--primary), 0 0 10px var(--primary),
+    box-shadow:
+      0 0 5px var(--primary),
+      0 0 10px var(--primary),
       0 0 15px var(--primary);
   }
   50% {
-    box-shadow: 0 0 10px var(--primary), 0 0 20px var(--primary),
+    box-shadow:
+      0 0 10px var(--primary),
+      0 0 20px var(--primary),
       0 0 30px var(--primary);
   }
 }
@@ -311,7 +317,8 @@
 
   .gradient-border {
     position: relative;
-    background: linear-gradient(white, white) padding-box,
+    background:
+      linear-gradient(white, white) padding-box,
       linear-gradient(135deg, var(--color-primary), var(--color-accent))
         border-box;
     border: 1px solid transparent;
@@ -329,18 +336,22 @@
   }
 
   .shadow-elegant {
-    box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.1),
+    box-shadow:
+      0 4px 20px -2px rgba(0, 0, 0, 0.1),
       0 2px 8px -2px rgba(0, 0, 0, 0.04);
   }
 
   .shadow-elegant-lg {
-    box-shadow: 0 10px 40px -4px rgba(0, 0, 0, 0.1),
+    box-shadow:
+      0 10px 40px -4px rgba(0, 0, 0, 0.1),
       0 4px 16px -4px rgba(0, 0, 0, 0.04);
   }
 
   /* 추가 유틸리티 클래스 */
   .hover-lift {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition:
+      transform 0.3s ease,
+      box-shadow 0.3s ease;
   }
 
   .hover-lift:hover {
@@ -354,8 +365,10 @@
   }
 
   .glow-on-hover:hover {
-    box-shadow: 0 0 20px rgba(99, 102, 241, 0.5),
-      0 0 40px rgba(99, 102, 241, 0.3), 0 0 60px rgba(99, 102, 241, 0.1);
+    box-shadow:
+      0 0 20px rgba(99, 102, 241, 0.5),
+      0 0 40px rgba(99, 102, 241, 0.3),
+      0 0 60px rgba(99, 102, 241, 0.1);
   }
 
   .shimmer-button {

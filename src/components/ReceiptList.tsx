@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 import { Receipt } from "../types/receipt";
 import { ReceiptCard } from "./ReceiptCard";
 import { Input } from "./ui/input";
@@ -66,19 +66,37 @@ export const ReceiptList: React.FC<ReceiptListProps> = ({
     return filtered;
   }, [receipts, searchQuery, selectedCategory, sortBy, sortOrder]);
 
-  const totalAmount = filteredAndSortedReceipts.reduce(
-    (sum, receipt) => sum + receipt.amount,
-    0
+  const totalAmount = useMemo(
+    () =>
+      filteredAndSortedReceipts.reduce(
+        (sum, receipt) => sum + receipt.amount,
+        0
+      ),
+    [filteredAndSortedReceipts]
   );
 
-  const handleSort = (newSortBy: "date" | "amount") => {
-    if (sortBy === newSortBy) {
-      setSortOrder(sortOrder === "desc" ? "asc" : "desc");
-    } else {
-      setSortBy(newSortBy);
-      setSortOrder("desc");
-    }
-  };
+  const handleSearchChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setSearchQuery(e.target.value);
+    },
+    []
+  );
+
+  const handleCategoryChange = useCallback((value: string) => {
+    setSelectedCategory(value);
+  }, []);
+
+  const handleSort = useCallback(
+    (newSortBy: "date" | "amount") => {
+      if (sortBy === newSortBy) {
+        setSortOrder(sortOrder === "desc" ? "asc" : "desc");
+      } else {
+        setSortBy(newSortBy);
+        setSortOrder("desc");
+      }
+    },
+    [sortBy, sortOrder]
+  );
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -92,7 +110,7 @@ export const ReceiptList: React.FC<ReceiptListProps> = ({
               type="text"
               placeholder="영수증 검색..."
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={handleSearchChange}
               className="shadow-elegant bg-card/50 hover:shadow-elegant-lg border-0 pl-10 backdrop-blur-sm transition-all duration-200 focus:scale-[1.02]"
             />
           </div>
@@ -101,7 +119,7 @@ export const ReceiptList: React.FC<ReceiptListProps> = ({
           <div className="flex gap-2">
             <Select
               value={selectedCategory}
-              onValueChange={setSelectedCategory}
+              onValueChange={handleCategoryChange}
             >
               <SelectTrigger className="shadow-elegant bg-card/50 hover:shadow-elegant-lg w-[140px] border-0 backdrop-blur-sm transition-all duration-200">
                 <SelectValue placeholder="전체" />

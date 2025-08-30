@@ -94,6 +94,28 @@ export const useReceipts = () => {
     );
   };
 
+  // 데이터 가져오기 (기존 데이터와 병합)
+  const importReceipts = (importedReceipts: Receipt[]) => {
+    const existingIds = new Set(receipts.map((r) => r.id));
+    const newReceipts = importedReceipts.filter((r) => !existingIds.has(r.id));
+    const updatedReceipts = [...receipts, ...newReceipts];
+
+    setReceipts(updatedReceipts);
+    saveToStorage(updatedReceipts);
+
+    return {
+      imported: newReceipts.length,
+      skipped: importedReceipts.length - newReceipts.length,
+      total: updatedReceipts.length,
+    };
+  };
+
+  // 모든 데이터 교체
+  const replaceAllReceipts = (newReceipts: Receipt[]) => {
+    setReceipts(newReceipts);
+    saveToStorage(newReceipts);
+  };
+
   return {
     receipts,
     loading,
@@ -102,5 +124,7 @@ export const useReceipts = () => {
     deleteReceipt,
     getReceiptsByCategory,
     searchReceipts,
+    importReceipts,
+    replaceAllReceipts,
   };
 };
