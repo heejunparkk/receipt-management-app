@@ -121,10 +121,10 @@ export const ReceiptList: React.FC<ReceiptListProps> = ({
               value={selectedCategory}
               onValueChange={handleCategoryChange}
             >
-              <SelectTrigger className="shadow-elegant bg-card/50 hover:shadow-elegant-lg w-[140px] border-0 backdrop-blur-sm transition-all duration-200">
+              <SelectTrigger className="shadow-elegant bg-card hover:shadow-elegant-lg w-[140px] border-0 backdrop-blur-sm transition-all duration-200">
                 <SelectValue placeholder="전체" />
               </SelectTrigger>
-              <SelectContent className="shadow-elegant-lg bg-card/95 border-0 backdrop-blur-xl">
+              <SelectContent className="shadow-elegant-lg bg-popover border-border border backdrop-blur-xl">
                 {categories.map((category) => (
                   <SelectItem
                     key={category}
