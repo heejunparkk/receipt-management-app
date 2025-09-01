@@ -129,7 +129,7 @@ export const StatsDashboard = memo<StatsDashboardProps>(({ receipts }) => {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {categoryData.map((category, index) => (
+              {categoryData.map((category) => (
                 <div key={category.category} className="space-y-2">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
@@ -204,7 +204,7 @@ export const StatsDashboard = memo<StatsDashboardProps>(({ receipts }) => {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {monthlyData.map((month, index) => (
+            {monthlyData.map((month) => (
               <div key={month.month} className="space-y-2">
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-medium">{month.month}</span>

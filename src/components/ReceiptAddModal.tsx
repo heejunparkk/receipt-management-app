@@ -14,6 +14,7 @@ import {
   FormLabel,
   FormMessage,
 } from "./ui/form";
+import { DatePicker } from "./ui/date-picker";
 import {
   Select,
   SelectContent,
@@ -189,20 +190,30 @@ const ReceiptAddModal: React.FC<ReceiptAddModalProps> = ({
 
             {/* 날짜와 카테고리 */}
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-              <div>
-                <label
-                  htmlFor="date"
-                  className="mb-2 block text-sm font-medium text-gray-700"
-                >
-                  날짜
-                </label>
-                <Input id="date" type="date" {...register("date")} />
-              </div>
+              <FormField
+                control={control}
+                name="date"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>날짜</FormLabel>
+                    <FormControl>
+                      <DatePicker
+                        date={field.value ? new Date(field.value) : undefined}
+                        onDateChange={(date) => {
+                          field.onChange(date ? formatDateForInput(date) : "");
+                        }}
+                        placeholder="날짜를 선택하세요"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
               <div>
                 <label
                   htmlFor="category"
-                  className="mb-2 block text-sm font-medium text-gray-700"
+                  className="text-foreground mb-2 block text-sm font-medium"
                 >
                   카테고리 *
                 </label>
@@ -234,7 +245,6 @@ const ReceiptAddModal: React.FC<ReceiptAddModalProps> = ({
                           sideOffset={4}
                           onCloseAutoFocus={(e) => e.preventDefault()}
                           onEscapeKeyDown={(e) => e.stopPropagation()}
-                          onPointerDownOutside={(e) => e.preventDefault()}
                         >
                           {categories.map((category) => (
                             <SelectItem
@@ -262,7 +272,7 @@ const ReceiptAddModal: React.FC<ReceiptAddModalProps> = ({
             <div>
               <label
                 htmlFor="description"
-                className="mb-2 block text-sm font-medium text-gray-700"
+                className="text-foreground mb-2 block text-sm font-medium"
               >
                 설명
               </label>
@@ -271,19 +281,19 @@ const ReceiptAddModal: React.FC<ReceiptAddModalProps> = ({
                 {...register("description")}
                 placeholder="추가 설명을 입력하세요 (선택사항)"
                 rows={3}
-                className="focus:ring-primary w-full resize-none rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-900 focus:border-transparent focus:ring-2 focus:outline-none"
+                className="focus:ring-primary border-input bg-background text-foreground placeholder:text-muted-foreground w-full resize-none rounded-lg border px-3 py-2 focus:border-transparent focus:ring-2 focus:outline-none"
               />
             </div>
 
             {/* 이미지 업로드 */}
             <div>
-              <label className="mb-2 block text-sm font-medium text-gray-700">
+              <label className="text-foreground mb-2 block text-sm font-medium">
                 영수증 이미지
               </label>
 
               {watchedImageUrl ? (
                 <div className="space-y-3">
-                  <div className="relative overflow-hidden rounded-lg border border-gray-300">
+                  <div className="border-border relative overflow-hidden rounded-lg border">
                     <img
                       src={watchedImageUrl}
                       alt="업로드된 영수증"
@@ -298,12 +308,12 @@ const ReceiptAddModal: React.FC<ReceiptAddModalProps> = ({
                       <X size={16} />
                     </button>
                   </div>
-                  <p className="text-center text-xs text-gray-500">
+                  <p className="text-muted-foreground text-center text-xs">
                     영수증 이미지가 업로드되었습니다
                   </p>
                 </div>
               ) : (
-                <div className="hover:border-primary rounded-lg border-2 border-dashed border-gray-300 p-6 text-center transition-colors">
+                <div className="hover:border-primary border-border rounded-lg border-2 border-dashed p-6 text-center transition-colors">
                   <input
                     type="file"
                     id="imageUpload"
@@ -315,15 +325,17 @@ const ReceiptAddModal: React.FC<ReceiptAddModalProps> = ({
                     htmlFor="imageUpload"
                     className="flex cursor-pointer flex-col items-center space-y-2"
                   >
-                    <Upload className="h-8 w-8 text-gray-400" />
+                    <Upload className="text-muted-foreground h-8 w-8" />
                     <div>
-                      <p className="text-sm text-gray-600">
+                      <p className="text-foreground text-sm">
                         <span className="text-primary font-medium">
                           클릭하여 업로드
                         </span>{" "}
                         또는
                       </p>
-                      <p className="text-xs text-gray-500">드래그 앤 드롭</p>
+                      <p className="text-muted-foreground text-xs">
+                        드래그 앤 드롭
+                      </p>
                     </div>
                   </label>
                 </div>
