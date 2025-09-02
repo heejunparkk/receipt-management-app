@@ -1,6 +1,6 @@
 import React from "react";
 import { Plus, Upload, X } from "lucide-react";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import toast from "react-hot-toast";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
@@ -23,7 +23,7 @@ import {
   SelectValue,
 } from "./ui/select";
 import { Receipt } from "../types/receipt";
-import { cn, formatDateForInput } from "../lib/utils";
+import { formatDateForInput } from "../lib/utils";
 import {
   receiptSchema,
   categories,
@@ -60,13 +60,12 @@ const ReceiptAddModal: React.FC<ReceiptAddModalProps> = ({
   });
 
   const {
-    register,
     handleSubmit,
     watch,
     setValue,
     reset,
     control,
-    formState: { errors, isSubmitting },
+    formState: { isSubmitting },
   } = methods;
 
   const watchedImageUrl = watch("imageUrl");
@@ -210,137 +209,137 @@ const ReceiptAddModal: React.FC<ReceiptAddModalProps> = ({
                 )}
               />
 
-              <div>
-                <label
-                  htmlFor="category"
-                  className="text-foreground mb-2 block text-sm font-medium"
-                >
-                  카테고리 *
-                </label>
-                <Controller
-                  name="category"
-                  control={control}
-                  render={({ field }) => (
-                    <div
-                      onClick={(e) => e.stopPropagation()}
-                      onMouseDown={(e) => e.stopPropagation()}
-                      onPointerDown={(e) => e.stopPropagation()}
-                    >
-                      <Select
-                        value={field.value}
-                        onValueChange={field.onChange}
+              <FormField
+                control={control}
+                name="category"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>카테고리 *</FormLabel>
+                    <FormControl>
+                      <div
+                        onClick={(e) => e.stopPropagation()}
+                        onMouseDown={(e) => e.stopPropagation()}
+                        onPointerDown={(e) => e.stopPropagation()}
                       >
-                        <SelectTrigger
-                          className={cn(
-                            errors.category &&
-                              "border-red-500 focus:border-red-500"
-                          )}
-                          onClick={(e) => e.stopPropagation()}
-                          onMouseDown={(e) => e.stopPropagation()}
+                        <Select
+                          value={field.value}
+                          onValueChange={field.onChange}
                         >
-                          <SelectValue placeholder="카테고리를 선택하세요" />
-                        </SelectTrigger>
-                        <SelectContent
-                          position="popper"
-                          sideOffset={4}
-                          onCloseAutoFocus={(e) => e.preventDefault()}
-                          onEscapeKeyDown={(e) => e.stopPropagation()}
-                        >
-                          {categories.map((category) => (
-                            <SelectItem
-                              key={category}
-                              value={category}
-                              onSelect={() => field.onChange(category)}
-                            >
-                              {category}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  )}
-                />
-                {errors.category && (
-                  <p className="mt-1 text-sm text-red-600">
-                    {errors.category.message}
-                  </p>
+                          <SelectTrigger
+                            onClick={(e) => e.stopPropagation()}
+                            onMouseDown={(e) => e.stopPropagation()}
+                          >
+                            <SelectValue placeholder="카테고리를 선택하세요" />
+                          </SelectTrigger>
+                          <SelectContent
+                            position="popper"
+                            sideOffset={4}
+                            onCloseAutoFocus={(e) => e.preventDefault()}
+                            onEscapeKeyDown={(e) => e.stopPropagation()}
+                          >
+                            {categories.map((category) => (
+                              <SelectItem
+                                key={category}
+                                value={category}
+                                onSelect={() => field.onChange(category)}
+                              >
+                                {category}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
                 )}
-              </div>
-            </div>
-
-            {/* 설명 */}
-            <div>
-              <label
-                htmlFor="description"
-                className="text-foreground mb-2 block text-sm font-medium"
-              >
-                설명
-              </label>
-              <textarea
-                id="description"
-                {...register("description")}
-                placeholder="추가 설명을 입력하세요 (선택사항)"
-                rows={3}
-                className="focus:ring-primary border-input bg-background text-foreground placeholder:text-muted-foreground w-full resize-none rounded-lg border px-3 py-2 focus:border-transparent focus:ring-2 focus:outline-none"
               />
             </div>
 
-            {/* 이미지 업로드 */}
-            <div>
-              <label className="text-foreground mb-2 block text-sm font-medium">
-                영수증 이미지
-              </label>
-
-              {watchedImageUrl ? (
-                <div className="space-y-3">
-                  <div className="border-border relative overflow-hidden rounded-lg border">
-                    <img
-                      src={watchedImageUrl}
-                      alt="업로드된 영수증"
-                      className="h-48 w-full object-cover"
+            {/* 설명 */}
+            <FormField
+              control={control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>설명</FormLabel>
+                  <FormControl>
+                    <textarea
+                      {...field}
+                      placeholder="추가 설명을 입력하세요 (선택사항)"
+                      rows={3}
+                      className="focus:ring-primary border-border bg-background text-foreground placeholder:text-muted-foreground w-full resize-none rounded-lg border-2 px-3 py-2 focus:border-transparent focus:ring-2 focus:outline-none"
                     />
-                    <button
-                      type="button"
-                      onClick={removeImage}
-                      className="absolute top-2 right-2 rounded-full bg-red-500 p-1 text-white transition-colors hover:bg-red-600"
-                      aria-label="이미지 제거"
-                    >
-                      <X size={16} />
-                    </button>
-                  </div>
-                  <p className="text-muted-foreground text-center text-xs">
-                    영수증 이미지가 업로드되었습니다
-                  </p>
-                </div>
-              ) : (
-                <div className="hover:border-primary border-border rounded-lg border-2 border-dashed p-6 text-center transition-colors">
-                  <input
-                    type="file"
-                    id="imageUpload"
-                    accept="image/*"
-                    onChange={handleImageUpload}
-                    className="hidden"
-                  />
-                  <label
-                    htmlFor="imageUpload"
-                    className="flex cursor-pointer flex-col items-center space-y-2"
-                  >
-                    <Upload className="text-muted-foreground h-8 w-8" />
-                    <div>
-                      <p className="text-foreground text-sm">
-                        <span className="text-primary font-medium">
-                          클릭하여 업로드
-                        </span>{" "}
-                        또는
-                      </p>
-                      <p className="text-muted-foreground text-xs">
-                        드래그 앤 드롭
-                      </p>
-                    </div>
-                  </label>
-                </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
               )}
-            </div>
+            />
+
+            {/* 이미지 업로드 */}
+            <FormField
+              control={control}
+              name="imageUrl"
+              render={() => (
+                <FormItem>
+                  <FormLabel>영수증 이미지</FormLabel>
+                  <FormControl>
+                    <div>
+                      {watchedImageUrl ? (
+                        <div className="space-y-3">
+                          <div className="border-border relative overflow-hidden rounded-lg border">
+                            <img
+                              src={watchedImageUrl}
+                              alt="업로드된 영수증"
+                              className="h-48 w-full object-cover"
+                            />
+                            <button
+                              type="button"
+                              onClick={removeImage}
+                              className="absolute top-2 right-2 rounded-full bg-red-500 p-1 text-white transition-colors hover:bg-red-600"
+                              aria-label="이미지 제거"
+                            >
+                              <X size={16} />
+                            </button>
+                          </div>
+                          <p className="text-muted-foreground text-center text-xs">
+                            영수증 이미지가 업로드되었습니다
+                          </p>
+                        </div>
+                      ) : (
+                        <div className="hover:border-primary border-border rounded-lg border-2 border-dashed p-6 text-center transition-colors">
+                          <input
+                            type="file"
+                            id="imageUpload"
+                            accept="image/*"
+                            onChange={handleImageUpload}
+                            className="hidden"
+                          />
+                          <label
+                            htmlFor="imageUpload"
+                            className="flex cursor-pointer flex-col items-center space-y-2"
+                          >
+                            <Upload className="text-muted-foreground h-8 w-8" />
+                            <div>
+                              <p className="text-foreground text-sm">
+                                <span className="text-primary font-medium">
+                                  클릭하여 업로드
+                                </span>{" "}
+                                또는
+                              </p>
+                              <p className="text-muted-foreground text-xs">
+                                드래그 앤 드롭
+                              </p>
+                            </div>
+                          </label>
+                        </div>
+                      )}
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
             {/* 버튼 */}
             <div className="flex justify-end space-x-3 pt-4">

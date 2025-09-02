@@ -69,14 +69,14 @@ const FormItem = React.forwardRef<
 
   return (
     <FormItemContext.Provider value={{ id }}>
-      <div ref={ref} className={cn("space-y-2", className)} {...props} />
+      <div ref={ref} className={cn("space-y-3", className)} {...props} />
     </FormItemContext.Provider>
   );
 });
 FormItem.displayName = "FormItem";
 
 const FormLabel = React.forwardRef<
-  React.ElementRef<"label">,
+  HTMLLabelElement,
   React.ComponentPropsWithoutRef<"label">
 >(({ className, ...props }, ref) => {
   const { error, formItemId } = useFormField();
@@ -87,6 +87,7 @@ const FormLabel = React.forwardRef<
       className={cn(
         error && "text-destructive",
         "text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70",
+        "mb-2 block",
         className
       )}
       htmlFor={formItemId}
@@ -97,7 +98,7 @@ const FormLabel = React.forwardRef<
 FormLabel.displayName = "FormLabel";
 
 const FormControl = React.forwardRef<
-  React.ElementRef<"div">,
+  HTMLDivElement,
   React.ComponentPropsWithoutRef<"div">
 >(({ ...props }, ref) => {
   const { error, formItemId, formDescriptionId, formMessageId } =
