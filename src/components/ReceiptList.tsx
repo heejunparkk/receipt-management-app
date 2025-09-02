@@ -111,7 +111,7 @@ export const ReceiptList: React.FC<ReceiptListProps> = ({
               placeholder="영수증 검색..."
               value={searchQuery}
               onChange={handleSearchChange}
-              className="shadow-elegant bg-card/50 hover:shadow-elegant-lg border-0 pl-10 backdrop-blur-sm transition-all duration-200 focus:scale-[1.02]"
+              className="shadow-elegant bg-card/50 hover:shadow-elegant-lg border-border pl-10 backdrop-blur-sm transition-all duration-200 focus:scale-[1.02]"
             />
           </div>
 
@@ -121,7 +121,7 @@ export const ReceiptList: React.FC<ReceiptListProps> = ({
               value={selectedCategory}
               onValueChange={handleCategoryChange}
             >
-              <SelectTrigger className="shadow-elegant bg-card hover:shadow-elegant-lg w-[140px] border-0 backdrop-blur-sm transition-all duration-200">
+              <SelectTrigger className="shadow-elegant bg-card hover:shadow-elegant-lg border-border w-[140px] backdrop-blur-sm transition-all duration-200">
                 <SelectValue placeholder="전체" />
               </SelectTrigger>
               <SelectContent className="shadow-elegant-lg bg-popover border-border border backdrop-blur-xl">
@@ -139,9 +139,8 @@ export const ReceiptList: React.FC<ReceiptListProps> = ({
 
             <Button
               variant="outline"
-              size="sm"
               onClick={() => handleSort("date")}
-              className="shadow-elegant bg-card/50 hover:shadow-elegant-lg hover:bg-primary/5 gap-2 border-0 backdrop-blur-sm transition-all duration-200"
+              className="shadow-elegant bg-card/50 hover:shadow-elegant-lg hover:bg-primary/5 border-border gap-2 backdrop-blur-sm transition-all duration-200"
             >
               <Calendar className="h-4 w-4" />
               날짜순
@@ -156,9 +155,8 @@ export const ReceiptList: React.FC<ReceiptListProps> = ({
 
             <Button
               variant="outline"
-              size="sm"
               onClick={() => handleSort("amount")}
-              className="shadow-elegant bg-card/50 hover:shadow-elegant-lg hover:bg-primary/5 gap-2 border-0 backdrop-blur-sm transition-all duration-200"
+              className="shadow-elegant bg-card/50 hover:shadow-elegant-lg hover:bg-primary/5 border-border gap-2 backdrop-blur-sm transition-all duration-200"
             >
               <DollarSign className="h-4 w-4" />
               금액순

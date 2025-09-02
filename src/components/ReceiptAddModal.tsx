@@ -216,39 +216,33 @@ const ReceiptAddModal: React.FC<ReceiptAddModalProps> = ({
                   <FormItem>
                     <FormLabel>카테고리 *</FormLabel>
                     <FormControl>
-                      <div
-                        onClick={(e) => e.stopPropagation()}
-                        onMouseDown={(e) => e.stopPropagation()}
-                        onPointerDown={(e) => e.stopPropagation()}
+                      <Select
+                        value={field.value}
+                        onValueChange={field.onChange}
                       >
-                        <Select
-                          value={field.value}
-                          onValueChange={field.onChange}
+                        <SelectTrigger
+                          onClick={(e) => e.stopPropagation()}
+                          onMouseDown={(e) => e.stopPropagation()}
                         >
-                          <SelectTrigger
-                            onClick={(e) => e.stopPropagation()}
-                            onMouseDown={(e) => e.stopPropagation()}
-                          >
-                            <SelectValue placeholder="카테고리를 선택하세요" />
-                          </SelectTrigger>
-                          <SelectContent
-                            position="popper"
-                            sideOffset={4}
-                            onCloseAutoFocus={(e) => e.preventDefault()}
-                            onEscapeKeyDown={(e) => e.stopPropagation()}
-                          >
-                            {categories.map((category) => (
-                              <SelectItem
-                                key={category}
-                                value={category}
-                                onSelect={() => field.onChange(category)}
-                              >
-                                {category}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
+                          <SelectValue placeholder="카테고리를 선택하세요" />
+                        </SelectTrigger>
+                        <SelectContent
+                          position="popper"
+                          sideOffset={4}
+                          onCloseAutoFocus={(e) => e.preventDefault()}
+                          onEscapeKeyDown={(e) => e.stopPropagation()}
+                        >
+                          {categories.map((category) => (
+                            <SelectItem
+                              key={category}
+                              value={category}
+                              onSelect={() => field.onChange(category)}
+                            >
+                              {category}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -268,7 +262,7 @@ const ReceiptAddModal: React.FC<ReceiptAddModalProps> = ({
                       {...field}
                       placeholder="추가 설명을 입력하세요 (선택사항)"
                       rows={3}
-                      className="focus:ring-primary border-border bg-background text-foreground placeholder:text-muted-foreground w-full resize-none rounded-lg border-2 px-3 py-2 focus:border-transparent focus:ring-2 focus:outline-none"
+                      className="focus:ring-primary border-border bg-background text-foreground placeholder:text-muted-foreground w-full resize-none rounded-lg border-1 px-3 py-2 shadow-sm focus:border-transparent focus:ring-2 focus:outline-none"
                     />
                   </FormControl>
                   <FormMessage />
