@@ -4,8 +4,7 @@ import { Header } from "./components/Header";
 import { ReceiptList } from "./components/ReceiptList";
 import { useReceipts } from "./hooks/useReceipts";
 import { Receipt } from "./types/receipt";
-import ReceiptAddModal from "./components/ReceiptAddModal";
-import ReceiptEditModal from "./components/ReceiptEditModal";
+import ReceiptFormModal from "./components/ReceiptFormModal";
 import ReceiptDetailModal from "./components/ReceiptDetailModal";
 import { StatsDashboard } from "./components/StatsDashboard";
 import { Button } from "./components/ui/button";
@@ -21,8 +20,9 @@ function App() {
   } = useReceipts();
 
   // 모달 상태 관리
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [formModalMode, setFormModalMode] = useState<"add" | "edit" | null>(
+    null
+  );
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const [selectedReceipt, setSelectedReceipt] = useState<Receipt | null>(null);
 
@@ -30,12 +30,13 @@ function App() {
   const [activeTab, setActiveTab] = useState<"receipts" | "stats">("receipts");
 
   const handleAddReceipt = () => {
-    setIsAddModalOpen(true);
+    setSelectedReceipt(null);
+    setFormModalMode("add");
   };
 
   const handleEditReceipt = (receipt: Receipt) => {
     setSelectedReceipt(receipt);
-    setIsEditModalOpen(true);
+    setFormModalMode("edit");
   };
 
   const handleViewReceipt = (receipt: Receipt) => {
@@ -48,8 +49,9 @@ function App() {
     toast.success("영수증이 삭제되었습니다.");
   };
 
-  const handleAddSubmit = async (
-    receiptData: Omit<Receipt, "id" | "createdAt" | "updatedAt">
+  const handleFormSubmit = async (
+    receiptData: Omit<Receipt, "id" | "createdAt" | "updatedAt">,
+    id?: string
   ) => {
     const formData = {
       title: receiptData.title,
@@ -60,33 +62,22 @@ function App() {
       description: receiptData.description,
       tags: receiptData.tags,
     };
-    await addReceipt(formData, receiptData.imageUrl);
-    setIsAddModalOpen(false);
-  };
 
-  const handleEditSubmit = async (
-    id: string,
-    receiptData: Omit<Receipt, "id" | "createdAt" | "updatedAt">
-  ) => {
-    const formData = {
-      title: receiptData.title,
-      amount: receiptData.amount,
-      date: receiptData.date.toISOString().split("T")[0],
-      category: receiptData.category,
-      storeName: receiptData.storeName,
-      description: receiptData.description,
-      tags: receiptData.tags,
-    };
-    await updateReceipt(id, formData);
-    toast.success("영수증이 수정되었습니다!");
-    setIsEditModalOpen(false);
-    setSelectedReceipt(null);
+    if (id) {
+      // 수정 모드
+      await updateReceipt(id, formData);
+    } else {
+      // 추가 모드
+      await addReceipt(formData, receiptData.imageUrl);
+    }
+
+    setFormModalMode(null);
   };
 
   const handleDetailEdit = (receipt: Receipt) => {
     setSelectedReceipt(receipt);
     setIsDetailModalOpen(false);
-    setIsEditModalOpen(true);
+    setFormModalMode("edit");
   };
 
   const handleDetailDelete = (id: string) => {
@@ -205,16 +196,11 @@ function App() {
       </main>
 
       {/* 모달들 */}
-      <ReceiptAddModal
-        isOpen={isAddModalOpen}
-        onClose={() => setIsAddModalOpen(false)}
-        onAdd={handleAddSubmit}
-      />
-
-      <ReceiptEditModal
-        isOpen={isEditModalOpen}
-        onClose={() => setIsEditModalOpen(false)}
-        onEdit={handleEditSubmit}
+      <ReceiptFormModal
+        mode={formModalMode || "add"}
+        isOpen={formModalMode !== null}
+        onClose={() => setFormModalMode(null)}
+        onSubmit={handleFormSubmit}
         receipt={selectedReceipt}
       />
 

@@ -1,5 +1,5 @@
-import React from "react";
-import { Plus, Upload, X } from "lucide-react";
+import React, { useEffect } from "react";
+import { Plus, Edit, Upload, X } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import toast from "react-hot-toast";
@@ -35,16 +35,23 @@ import {
   isValidFileSize,
 } from "../utils/imageUtils";
 
-interface ReceiptAddModalProps {
+interface ReceiptFormModalProps {
+  mode: "add" | "edit";
   isOpen: boolean;
   onClose: () => void;
-  onAdd: (receipt: Omit<Receipt, "id" | "createdAt" | "updatedAt">) => void;
+  onSubmit: (
+    data: Omit<Receipt, "id" | "createdAt" | "updatedAt">,
+    id?: string
+  ) => void;
+  receipt?: Receipt | null;
 }
 
-const ReceiptAddModal: React.FC<ReceiptAddModalProps> = ({
+const ReceiptFormModal: React.FC<ReceiptFormModalProps> = ({
+  mode,
   isOpen,
   onClose,
-  onAdd,
+  onSubmit,
+  receipt,
 }) => {
   const methods = useForm({
     resolver: zodResolver(receiptSchema),
@@ -70,9 +77,34 @@ const ReceiptAddModal: React.FC<ReceiptAddModalProps> = ({
 
   const watchedImageUrl = watch("imageUrl");
 
-  const onSubmit = async (data: ReceiptFormData) => {
+  // 모드나 영수증이 변경될 때 폼 데이터 초기화
+  useEffect(() => {
+    if (mode === "edit" && receipt) {
+      reset({
+        title: receipt.title,
+        storeName: receipt.storeName,
+        amount: receipt.amount,
+        date: formatDateForInput(receipt.date),
+        category: receipt.category,
+        description: receipt.description || "",
+        imageUrl: receipt.imageUrl || "",
+      });
+    } else if (mode === "add") {
+      reset({
+        title: "",
+        storeName: "",
+        amount: 0,
+        date: formatDateForInput(new Date()),
+        category: "",
+        description: "",
+        imageUrl: "",
+      });
+    }
+  }, [mode, receipt, reset]);
+
+  const handleFormSubmit = async (data: ReceiptFormData) => {
     try {
-      const newReceipt: Omit<Receipt, "id" | "createdAt" | "updatedAt"> = {
+      const receiptData: Omit<Receipt, "id" | "createdAt" | "updatedAt"> = {
         title: data.title.trim(),
         storeName: data.storeName.trim(),
         amount: data.amount,
@@ -82,14 +114,21 @@ const ReceiptAddModal: React.FC<ReceiptAddModalProps> = ({
         imageUrl: data.imageUrl || "",
       };
 
-      await onAdd(newReceipt);
+      if (mode === "edit" && receipt) {
+        await onSubmit(receiptData, receipt.id);
+        toast.success("영수증이 성공적으로 수정되었습니다!");
+      } else {
+        await onSubmit(receiptData);
+        toast.success("영수증이 성공적으로 추가되었습니다!");
+      }
 
-      toast.success("영수증이 성공적으로 추가되었습니다!");
       reset();
       onClose();
     } catch (error) {
-      console.error("영수증 추가 실패:", error);
-      toast.error("영수증 추가에 실패했습니다. 다시 시도해주세요.");
+      console.error(`영수증 ${mode === "edit" ? "수정" : "추가"} 실패:`, error);
+      toast.error(
+        `영수증 ${mode === "edit" ? "수정" : "추가"}에 실패했습니다. 다시 시도해주세요.`
+      );
     }
   };
 
@@ -123,14 +162,24 @@ const ReceiptAddModal: React.FC<ReceiptAddModalProps> = ({
     setValue("imageUrl", "");
   };
 
+  const handleClose = () => {
+    reset();
+    onClose();
+  };
+
+  const isEditMode = mode === "edit";
+  const title = isEditMode ? "영수증 수정" : "새 영수증 추가";
+  const submitButtonText = isEditMode ? "영수증 수정" : "영수증 추가";
+  const submitIcon = isEditMode ? Edit : Plus;
+
   return (
-    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+    <Dialog open={isOpen} onOpenChange={(open) => !open && handleClose()}>
       <DialogContent className="max-w-2xl">
         <DialogHeader>
-          <DialogTitle>새 영수증 추가</DialogTitle>
+          <DialogTitle>{title}</DialogTitle>
         </DialogHeader>
         <Form {...methods}>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-6">
             {/* 제목 */}
             <FormField
               control={control}
@@ -216,33 +265,39 @@ const ReceiptAddModal: React.FC<ReceiptAddModalProps> = ({
                   <FormItem>
                     <FormLabel>카테고리 *</FormLabel>
                     <FormControl>
-                      <Select
-                        value={field.value}
-                        onValueChange={field.onChange}
+                      <div
+                        onClick={(e) => e.stopPropagation()}
+                        onMouseDown={(e) => e.stopPropagation()}
+                        onPointerDown={(e) => e.stopPropagation()}
                       >
-                        <SelectTrigger
-                          onClick={(e) => e.stopPropagation()}
-                          onMouseDown={(e) => e.stopPropagation()}
+                        <Select
+                          value={field.value}
+                          onValueChange={field.onChange}
                         >
-                          <SelectValue placeholder="카테고리를 선택하세요" />
-                        </SelectTrigger>
-                        <SelectContent
-                          position="popper"
-                          sideOffset={4}
-                          onCloseAutoFocus={(e) => e.preventDefault()}
-                          onEscapeKeyDown={(e) => e.stopPropagation()}
-                        >
-                          {categories.map((category) => (
-                            <SelectItem
-                              key={category}
-                              value={category}
-                              onSelect={() => field.onChange(category)}
-                            >
-                              {category}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                          <SelectTrigger
+                            onClick={(e) => e.stopPropagation()}
+                            onMouseDown={(e) => e.stopPropagation()}
+                          >
+                            <SelectValue placeholder="카테고리를 선택하세요" />
+                          </SelectTrigger>
+                          <SelectContent
+                            position="popper"
+                            sideOffset={4}
+                            onCloseAutoFocus={(e) => e.preventDefault()}
+                            onEscapeKeyDown={(e) => e.stopPropagation()}
+                          >
+                            {categories.map((category) => (
+                              <SelectItem
+                                key={category}
+                                value={category}
+                                onSelect={() => field.onChange(category)}
+                              >
+                                {category}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -262,7 +317,7 @@ const ReceiptAddModal: React.FC<ReceiptAddModalProps> = ({
                       {...field}
                       placeholder="추가 설명을 입력하세요 (선택사항)"
                       rows={3}
-                      className="focus:ring-primary border-border bg-background text-foreground placeholder:text-muted-foreground w-full resize-none rounded-lg border-1 px-3 py-2 shadow-sm focus:border-transparent focus:ring-2 focus:outline-none"
+                      className="focus:ring-primary border-border bg-background text-foreground placeholder:text-muted-foreground w-full resize-none rounded-lg border-2 px-3 py-2 shadow-sm focus:border-transparent focus:ring-2 focus:outline-none"
                     />
                   </FormControl>
                   <FormMessage />
@@ -304,13 +359,13 @@ const ReceiptAddModal: React.FC<ReceiptAddModalProps> = ({
                         <div className="hover:border-primary border-border rounded-lg border-2 border-dashed p-6 text-center transition-colors">
                           <input
                             type="file"
-                            id="imageUpload"
+                            id={`imageUpload-${mode}`}
                             accept="image/*"
                             onChange={handleImageUpload}
                             className="hidden"
                           />
                           <label
-                            htmlFor="imageUpload"
+                            htmlFor={`imageUpload-${mode}`}
                             className="flex cursor-pointer flex-col items-center space-y-2"
                           >
                             <Upload className="text-muted-foreground h-8 w-8" />
@@ -340,10 +395,7 @@ const ReceiptAddModal: React.FC<ReceiptAddModalProps> = ({
               <Button
                 type="button"
                 variant="outline"
-                onClick={() => {
-                  reset();
-                  onClose();
-                }}
+                onClick={handleClose}
                 disabled={isSubmitting}
               >
                 취소
@@ -356,12 +408,15 @@ const ReceiptAddModal: React.FC<ReceiptAddModalProps> = ({
                 {isSubmitting ? (
                   <>
                     <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
-                    추가 중...
+                    {isEditMode ? "수정 중..." : "추가 중..."}
                   </>
                 ) : (
                   <>
-                    <Plus size={16} className="mr-2" />
-                    영수증 추가
+                    {React.createElement(submitIcon, {
+                      size: 16,
+                      className: "mr-2",
+                    })}
+                    {submitButtonText}
                   </>
                 )}
               </Button>
@@ -373,4 +428,4 @@ const ReceiptAddModal: React.FC<ReceiptAddModalProps> = ({
   );
 };
 
-export default ReceiptAddModal;
+export default ReceiptFormModal;
