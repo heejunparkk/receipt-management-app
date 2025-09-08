@@ -18,18 +18,9 @@ export const CameraCapture: React.FC<CameraCaptureProps> = ({
     useCamera();
 
   useEffect(() => {
-    console.log(
-      "CameraCapture useEffect - isOpen:",
-      isOpen,
-      "isActive:",
-      isActive
-    );
-
     if (isOpen && !isActive) {
-      console.log("카메라 시작 시도");
       startCamera();
     } else if (!isOpen && isActive) {
-      console.log("카메라 정지 시도");
       stopCamera();
     }
 
@@ -42,23 +33,14 @@ export const CameraCapture: React.FC<CameraCaptureProps> = ({
   }, [isOpen, isActive, startCamera, stopCamera]);
 
   const handleCapture = async () => {
-    console.log("촬영 버튼 클릭됨");
-    alert("촬영 시도 중..."); // 디버깅용
-
     try {
       const imageData = await capturePhoto();
-      console.log("capturePhoto 결과:", imageData ? "성공" : "실패");
-
       if (imageData) {
-        alert("사진 촬영 성공!"); // 디버깅용
         onCapture(imageData);
         onClose();
-      } else {
-        alert("사진 촬영 실패"); // 디버깅용
       }
     } catch (error) {
       console.error("촬영 중 오류:", error);
-      alert("촬영 중 오류 발생: " + error); // 디버깅용
     }
   };
 
@@ -70,18 +52,8 @@ export const CameraCapture: React.FC<CameraCaptureProps> = ({
   };
 
   if (!isOpen) {
-    console.log("CameraCapture - isOpen이 false라서 렌더링 안함");
     return null;
   }
-
-  console.log(
-    "🎥 CameraCapture 렌더링 시작! isOpen:",
-    isOpen,
-    "isActive:",
-    isActive,
-    "error:",
-    error
-  );
 
   return (
     <div
@@ -146,8 +118,6 @@ export const CameraCapture: React.FC<CameraCaptureProps> = ({
               muted
               autoPlay
               controls={false}
-              onLoadedMetadata={() => console.log("비디오 메타데이터 로드됨")}
-              onCanPlay={() => console.log("비디오 재생 준비됨")}
             />
 
             {/* 영수증 가이드 프레임 */}
@@ -182,7 +152,6 @@ export const CameraCapture: React.FC<CameraCaptureProps> = ({
               onClick={handleCapture}
               onTouchStart={(e) => {
                 e.preventDefault();
-                console.log("촬영 버튼 터치됨");
                 handleCapture();
               }}
               className="flex h-20 w-20 items-center justify-center rounded-full bg-white text-black hover:bg-gray-200"

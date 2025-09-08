@@ -18,21 +18,14 @@ export const useCamera = (): CameraHook => {
 
   const startCamera = useCallback(async () => {
     try {
-      console.log("startCamera 호출됨");
       setError(null);
 
-      // 카메라 지원 확인 (여러 방법 시도)
+      // 카메라 지원 확인
       if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-        // 일부 모바일 브라우저에서는 HTTP에서도 작동할 수 있음
-        console.warn("표준 getUserMedia API 없음, 대체 방법 시도");
-
-        // 간단한 대체 메시지 표시
         throw new Error(
           "카메라 접근이 제한되어 있습니다. 최신 브라우저나 HTTPS 연결을 사용해주세요."
         );
       }
-
-      console.log("미디어 장치 지원 확인됨");
 
       // 모바일에서 후면 카메라 우선 사용
       const constraints: MediaStreamConstraints = {
@@ -44,7 +37,6 @@ export const useCamera = (): CameraHook => {
         audio: false,
       };
 
-      console.log("getUserMedia 호출 중...", constraints);
       const mediaStream =
         await navigator.mediaDevices.getUserMedia(constraints);
 
@@ -55,7 +47,6 @@ export const useCamera = (): CameraHook => {
         try {
           await videoRef.current.play();
         } catch (playError) {
-          console.warn("비디오 재생 중 오류 (무시 가능):", playError);
           // AbortError는 무시하고 계속 진행
           if ((playError as Error).name !== "AbortError") {
             throw playError;

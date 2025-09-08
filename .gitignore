@@ -10,7 +10,13 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
+dev-dist
 *.local
+
+# SSL certificates
+*.pem
+*.key
+*.crt
 
 # Editor directories and files
 .vscode/*

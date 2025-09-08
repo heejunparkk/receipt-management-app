@@ -14,20 +14,16 @@ export interface ParsedReceiptData {
 
 // 간단한 클라이언트 사이드 OCR (Tesseract.js 사용 예정)
 export const extractTextFromImage = async (
-  imageData: string
+  _imageData: string
 ): Promise<OCRResult> => {
   try {
-    // 실제로는 Tesseract.js나 다른 OCR 라이브러리를 사용
-    // 지금은 모의 데이터 반환
-    console.log("Processing image:", imageData.slice(0, 50) + "...");
-
-    // TODO: Tesseract.js 통합
+    // TODO: 실제 OCR 라이브러리 통합 (Tesseract.js 등)
     // const { createWorker } = await import('tesseract.js');
     // const worker = await createWorker('kor+eng');
     // const { data: { text, confidence } } = await worker.recognize(imageData);
     // await worker.terminate();
 
-    // 임시 모의 OCR 결과
+    // 임시 모의 OCR 결과 (개발용)
     const mockText = `
       롯데마트 본점
       2024-01-15 14:30:25
