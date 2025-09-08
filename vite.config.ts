@@ -4,12 +4,19 @@ import { VitePWA } from "vite-plugin-pwa";
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  server: {
+    host: true,
+    https: {
+      key: "./key.pem",
+      cert: "./cert.pem",
+    },
+  },
   plugins: [
     react(),
     VitePWA({
       registerType: "autoUpdate",
       devOptions: {
-        enabled: true,
+        enabled: false, // 개발 환경에서 PWA 비활성화
       },
       includeAssets: ["favicon.ico", "apple-touch-icon.png"],
       manifest: {
