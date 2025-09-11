@@ -32,11 +32,21 @@ export function ThemeProvider({
   storageKey = "receipt-ui-theme",
   ...props
 }: ThemeProviderProps) {
-  const [theme, setTheme] = useState<Theme>(
-    () => (localStorage.getItem(storageKey) as Theme) || defaultTheme
-  );
+  const [theme, setTheme] = useState<Theme>(defaultTheme);
+  const [mounted, setMounted] = useState(false);
+
+  // 클라이언트에서만 localStorage에서 테마를 가져옴
+  useEffect(() => {
+    setMounted(true);
+    const storedTheme = localStorage.getItem(storageKey) as Theme;
+    if (storedTheme) {
+      setTheme(storedTheme);
+    }
+  }, [storageKey]);
 
   useEffect(() => {
+    if (!mounted) return;
+
     const root = window.document.documentElement;
 
     root.classList.remove("light", "dark");
@@ -52,15 +62,27 @@ export function ThemeProvider({
     }
 
     root.classList.add(theme);
-  }, [theme]);
+  }, [theme, mounted]);
 
   const value = {
     theme,
     setTheme: (theme: Theme) => {
-      localStorage.setItem(storageKey, theme);
+      // mounted가 true일 때만 localStorage에 저장
+      if (mounted) {
+        localStorage.setItem(storageKey, theme);
+      }
       setTheme(theme);
     },
   };
+
+  // 서버와 클라이언트 간의 hydration mismatch 방지
+  if (!mounted) {
+    return (
+      <ThemeProviderContext.Provider {...props} value={value}>
+        {children}
+      </ThemeProviderContext.Provider>
+    );
+  }
 
   return (
     <ThemeProviderContext.Provider {...props} value={value}>
