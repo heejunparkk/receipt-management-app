@@ -295,17 +295,49 @@ const ReceiptFormModal: React.FC<ReceiptFormModalProps> = ({
                       <FormLabel>금액 *</FormLabel>
                       <FormControl>
                         <Input
-                          type="number"
+                          type="text"
                           placeholder="0"
-                          min="0"
-                          step="100"
-                          {...field}
+                          inputMode="numeric"
+                          pattern="[0-9,]*"
                           value={
-                            typeof field.value === "number" ? field.value : ""
+                            field.value ? field.value.toLocaleString() : ""
                           }
-                          onChange={(e) =>
-                            field.onChange(Number(e.target.value))
-                          }
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            // 콤마 제거 후 숫자만 추출
+                            const numericValue = value.replace(/,/g, "");
+
+                            // 숫자만 허용하고 최대 10자리까지
+                            if (/^\d{0,10}$/.test(numericValue)) {
+                              // 빈 문자열이면 0, 아니면 숫자로 변환
+                              field.onChange(
+                                numericValue === ""
+                                  ? 0
+                                  : parseInt(numericValue, 10)
+                              );
+                            }
+                          }}
+                          onKeyDown={(e) => {
+                            // 숫자, 백스페이스, 삭제, 탭, 화살표 키, 콤마만 허용
+                            if (
+                              !/[0-9,]/.test(e.key) &&
+                              ![
+                                "Backspace",
+                                "Delete",
+                                "Tab",
+                                "ArrowLeft",
+                                "ArrowRight",
+                                "Home",
+                                "End",
+                              ].includes(e.key) &&
+                              !(
+                                e.ctrlKey &&
+                                ["a", "c", "v", "x"].includes(e.key)
+                              )
+                            ) {
+                              e.preventDefault();
+                            }
+                          }}
                         />
                       </FormControl>
                       <FormMessage />
@@ -345,39 +377,33 @@ const ReceiptFormModal: React.FC<ReceiptFormModalProps> = ({
                     <FormItem>
                       <FormLabel>카테고리 *</FormLabel>
                       <FormControl>
-                        <div
-                          onClick={(e) => e.stopPropagation()}
-                          onMouseDown={(e) => e.stopPropagation()}
-                          onPointerDown={(e) => e.stopPropagation()}
+                        <Select
+                          value={field.value}
+                          onValueChange={field.onChange}
                         >
-                          <Select
-                            value={field.value}
-                            onValueChange={field.onChange}
+                          <SelectTrigger
+                            onClick={(e) => e.stopPropagation()}
+                            onMouseDown={(e) => e.stopPropagation()}
                           >
-                            <SelectTrigger
-                              onClick={(e) => e.stopPropagation()}
-                              onMouseDown={(e) => e.stopPropagation()}
-                            >
-                              <SelectValue placeholder="카테고리를 선택하세요" />
-                            </SelectTrigger>
-                            <SelectContent
-                              position="popper"
-                              sideOffset={4}
-                              onCloseAutoFocus={(e) => e.preventDefault()}
-                              onEscapeKeyDown={(e) => e.stopPropagation()}
-                            >
-                              {categories.map((category) => (
-                                <SelectItem
-                                  key={category}
-                                  value={category}
-                                  onSelect={() => field.onChange(category)}
-                                >
-                                  {category}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </div>
+                            <SelectValue placeholder="카테고리를 선택하세요" />
+                          </SelectTrigger>
+                          <SelectContent
+                            position="popper"
+                            sideOffset={4}
+                            onCloseAutoFocus={(e) => e.preventDefault()}
+                            onEscapeKeyDown={(e) => e.stopPropagation()}
+                          >
+                            {categories.map((category) => (
+                              <SelectItem
+                                key={category}
+                                value={category}
+                                onSelect={() => field.onChange(category)}
+                              >
+                                {category}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                       </FormControl>
                       <FormMessage />
                     </FormItem>

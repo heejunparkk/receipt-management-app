@@ -88,7 +88,6 @@ export const ReceiptCard = memo<ReceiptCardProps>(
                     onClick={() => onEdit(receipt)}
                   >
                     <Edit2 className="mr-2 h-4 w-4" />
-                    수정
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>
@@ -105,7 +104,6 @@ export const ReceiptCard = memo<ReceiptCardProps>(
                     onClick={() => onDelete(receipt.id)}
                   >
                     <Trash2 className="mr-2 h-4 w-4" />
-                    삭제
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>
